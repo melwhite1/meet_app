@@ -1,11 +1,6 @@
 import React, { Component } from 'react';
 
-class CitySearch extends Component {
-  state = {
-    query: '',
-    suggestions: []
-  }
-
+export class CitySearch extends Component {
   handleInputChanged = (event) => {
     const value = event.target.value;
     const suggestions = this.props.locations.filter((location) => {
@@ -23,6 +18,10 @@ class CitySearch extends Component {
   });
 }
 
+  state = {
+    query: '',
+    suggestions: []
+  };
 
   render() {
     return (
