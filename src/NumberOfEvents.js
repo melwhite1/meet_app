@@ -9,6 +9,7 @@ export class NumberOfEvents extends Component {
   render() {
     return (
       <div className="numberOfEvents">
+        <p>Number of Events</p>
         <input
           type="number"
           className="number-input"
