@@ -11,9 +11,8 @@ class App extends Component {
   state ={
     events: [],
     locations: [],
-    eventsLength: 32,
-    savedLocation: "all",
-    totalResNumber: "",
+    locationSelected: 'all',
+    numberOfEvents: 32
   };
 
   updateEvents = (location) => {
@@ -27,28 +26,58 @@ class App extends Component {
     });
   }
 
-  componentDidMount() {
-    this.mounted = true;
-    getEvents().then((events) => {
-      if (this.mounted) {
-        this.setState({ events, locations: extractLocations(events) });
-      }
-    });
+
+  async componentDidMount() {
+      this.mounted = true;
+      getEvents().then((events) => {
+          if (this.mounted) {
+              this.setState({
+                  events: events.slice(0, this.state.numberOfEvents),
+                  locations: extractLocations(events)
+              });
+          }
+      });
   }
 
   componentWillUnmount(){
     this.mounted = false;
   }
 
-  render() {
+  updateEvents = (location, maxNumEvents) => {
+    if (maxNumEvents === undefined) {
+        maxNumEvents = this.state.numberOfEvents;
+    } else(
+        this.setState({ numberOfEvents: maxNumEvents })
+    )
+    if (location === undefined) {
+        location = this.state.locationSelected;
+    }
+    getEvents().then((events) => {
+        let locationEvents = (location === 'all')
+            ? events
+            : events.filter((event) => event.location === location);
+        this.setState({
+            events: locationEvents.slice(0, maxNumEvents),
+            numberOfEvents: maxNumEvents,
+            locationSelected: location
+        });
+    });
+}
+
+render() {
     return (
-      <div className="App">
-        <CitySearch locations={this.state.locations} updateEvents={this.updateEvents} />
-        <NumberOfEvents />
-        <EventList events={this.state.events} />
-      </div>
+        <div className="App">
+            <CitySearch
+                locations={this.state.locations}
+                updateEvents={this.updateEvents} />
+            <NumberOfEvents
+                events={this.state.events}
+                updateEvents={this.updateEvents}/>
+            <EventList
+                events={this.state.events}/>
+        </div>
     );
-  }
+}
 }
 
 export default App;

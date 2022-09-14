@@ -1,51 +1,56 @@
-import React, { Component } from "react";
-export class Event extends Component {
-  toggleEventDetails = () => {
-    this.setState({ show: !this.state.show });
-  };
-  state = { show: false };
-  render() {
-    const { event } = this.props;
-    return (
-      <>
+import React, { Component } from 'react';
 
-        <div className="event">
-          <h1 className="event-summary-title">{event.summary}</h1>
-          <p className="event-info">
-            {event.start.dateTime} {event.start.timeZone} {event.location}
-          </p>
-          {this.state.show && (
-            <>
-              <h2 className="event-about-title">About event:</h2>
-              <p className="event-description">{event.description}</p>
-              <a
-                href={event.htmlLink}
-                target="_blank"
-                rel="noreferrer"
-                className="event-htmlLink"
-              >
-                See details on Google Calendar
-              </a>
-            </>
-          )}
-          {!this.state.show ? (
-            <button
-              className="event-showDetails-btn"
-              onClick={this.toggleEventDetails}
-            >
-              Show Details
-            </button>
-          ) : (
-            <button
-              className="event-hideDetails-btn"
-              onClick={this.toggleEventDetails}
-            >
-              Hide Details
-            </button>
-          )}
-        </div>
-      </>
-    );
-  }
+class Event extends Component {
+    state = {
+        collapsed: true
+    };
+
+    handleClick = () => {
+        this.setState({ collapsed: !this.state.collapsed })
+    };
+
+
+    toggleBtnText = () => {
+        return `${this.state.collapsed
+            ? 'SHOW DETAILS'
+            : 'HIDE DETAILS'
+        }`;
+    };
+
+    render() {
+        const { event } = this.props;
+
+        return (
+            <div className="event">
+                <h3 className="title">{event.summary}</h3>
+                <div className="fb-date-location">
+                    <p className="start-time">
+                        {event.start.dateTime.slice(0,10)}
+                    </p>
+
+                    <p className="location">{event.location}</p>
+
+                </div>
+
+                <button
+                    className="btn-toggle-details"
+                    onClick={this.handleClick}>
+                    {this.toggleBtnText()}
+                </button>
+                {!this.state.collapsed && (
+                    <div className="event-details">
+                        {event.description}
+                        <p>
+                            <a className="link"
+                                target="_blank"
+                                href="{event.htmlLink}">
+                                Add to my Calendar
+                            </a>
+                        </p>
+                    </div>
+                )}
+            </div>
+        );
+    }
 }
 export default Event;
