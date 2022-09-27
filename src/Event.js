@@ -43,7 +43,7 @@ class Event extends Component {
                         <p>
                             <a className="link"
                                 target="_blank"
-                                href="{event.htmlLink}">
+                                href={event.htmlLink}>
                                 Add to my Calendar
                             </a>
                         </p>
